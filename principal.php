@@ -38,6 +38,7 @@ if (!isset($_SESSION['usuario_autenticado']) || $_SESSION['usuario_autenticado']
 
     $("#conteudo").on("click", "#excluir", function(){
         var codigo = $(this).data('codigo'); //ESSE ATRIBUTO É MUITO ZIKA VIADO
+        var div = this.closest("div")
         $.ajax({
             url: "deleta.php",
             type: "POST",
@@ -49,7 +50,12 @@ if (!isset($_SESSION['usuario_autenticado']) || $_SESSION['usuario_autenticado']
             alert("Falha na requisição AJAX: " + textStatus);
         }).always(function() {
         });
+        div.innerHTML = ""
     });
+
+        document.getElementById("deslogar").addEventListener("click", function () {
+            window.location.href="desloga.php"
+        })
     });
 
 
@@ -66,8 +72,7 @@ if (!isset($_SESSION['usuario_autenticado']) || $_SESSION['usuario_autenticado']
         <input id="quantidade" type="text" name="quantidade" placeholder="Insira a Quantidade do Produto">
         <button id="enviar" type="button">Cadastrar Produto</button>
     </form>
-    <button type="button">Criar Novo Usuário</button>
-    <button type="button">Deslogar Sessão</button>
+    <button id="deslogar" type="button">Deslogar Sessão</button>
     <div id="conteudo"></div>
 
 </body>
