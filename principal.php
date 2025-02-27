@@ -26,15 +26,36 @@ if (!isset($_SESSION['usuario_autenticado']) || $_SESSION['usuario_autenticado']
             data: { nome: nome, codigo: codigo, valor: valor, quantidade: quantidade}, 
             dataType: "html"
         }).done(function(resp) {
-            $("#conteudo").append(`<p>Nome: ${nome} | Código: ${codigo} | Valor: ${valor} | Quantidade ${quantidade}</p> <button id="excluir">Excluir Item</button>`);
+            $("#conteudo").append(`<div> <p>Nome: ${nome} | Código: ${codigo} | Valor: ${valor} | Quantidade ${quantidade}</p> <button data-codigo="${codigo}" id="excluir">Excluir Item</button> </div>`);
             console.log(resp);
         }).fail(function(jqXHR, textStatus) {
             alert("Falha na requisição AJAX: " + textStatus);
         }).always(function() {
             console.log("Requisição AJAX concluída");
+            $("#nome, #codigo, #valor, #quantidade").val("");
         });
     });
-});
+
+    $("#conteudo").on("click", "#excluir", function(){
+        var codigo = $(this).data('codigo'); //ESSE ATRIBUTO É MUITO ZIKA VIADO
+        $.ajax({
+            url: "deleta.php",
+            type: "POST",
+            data: { codigo: codigo}, 
+            dataType: "html"
+        }).done(function(resp) {
+            console.log("Excluido com Sucesso")
+        }).fail(function(jqXHR, textStatus) {
+            alert("Falha na requisição AJAX: " + textStatus);
+        }).always(function() {
+        });
+    });
+    });
+
+
+
+
+
     </script>
 </head>
 <body>
