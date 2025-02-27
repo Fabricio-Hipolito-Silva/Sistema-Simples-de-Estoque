@@ -14,7 +14,24 @@ if (!isset($_SESSION['usuario_autenticado']) || $_SESSION['usuario_autenticado']
     <title>Principal</title>
     <script src="jquery.js"></script>
     <script>
-    $(document).ready(function(){
+
+    window.onload = reload();
+
+    function reload() {
+        $.ajax({
+            url: "array.php",
+            type: "POST",
+            data: { acao: "verificar" },
+         dataType: "html"
+ }).done(function(resp) {
+    $("#conteudo").html(resp); 
+    }).fail(function(jqXHR, textStatus) {
+    alert("Falha na requisição AJAX: " + textStatus);
+    }).always(function() {
+    console.log("Requisição AJAX registro concluída");
+    });
+}
+    $(document).ready(function(){    
     $("#enviar").click(function(){
         var nome = $("#nome").val();
         var codigo = $("#codigo").val();
@@ -26,7 +43,7 @@ if (!isset($_SESSION['usuario_autenticado']) || $_SESSION['usuario_autenticado']
             data: { nome: nome, codigo: codigo, valor: valor, quantidade: quantidade}, 
             dataType: "html"
         }).done(function(resp) {
-            $("#conteudo").append(`<div> <p>Nome: ${nome} | Código: ${codigo} | Valor: ${valor} | Quantidade ${quantidade}</p> <button data-codigo="${codigo}" id="excluir">Excluir Item</button> </div>`);
+            $("#conteudo").append(`<div> Nome: ${nome} | Código: ${codigo} | Valor: ${valor} | Quantidade ${quantidade} <button data-codigo="${codigo}" id="excluir">Excluir Item</button> <button type="button"> Alterar </button> </div>`);
             console.log(resp);
         }).fail(function(jqXHR, textStatus) {
             alert("Falha na requisição AJAX: " + textStatus);
@@ -52,6 +69,8 @@ if (!isset($_SESSION['usuario_autenticado']) || $_SESSION['usuario_autenticado']
         });
         div.innerHTML = ""
     });
+
+  
 
         document.getElementById("deslogar").addEventListener("click", function () {
             window.location.href="desloga.php"
